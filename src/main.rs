@@ -4,8 +4,9 @@ use ring_compat::signature::{
 };
 use actix_web::{
     web, App, HttpRequest, HttpResponse,
-    HttpServer, Responder
+    HttpServer, Responder, middleware::Logger,
 };
+use env_logger::Env;
 use hex_literal::hex;
 use const_decoder::Decoder;
 use serde_json::json;
@@ -50,6 +51,8 @@ async fn interaction(
 async fn main() -> std::io::Result<()> {
     let pk = hex!("07e912b259237e947da9c0e677dd6f8834cd2cf0c4b22cd1ab05fed570473505");
     let verifykey: VerifyingKey = VerifyingKey::new(&pk).unwrap();
+
+    env_logger::init_from_env(Env::default().default_filter_or("info"));
     HttpServer::new(move || {
         App::new()
             .route("/", web::get().to(base))
@@ -57,6 +60,8 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(AppState {
                 verifykey: verifykey.clone(),
             }))
+            .wrap(Logger::default())
+            .wrap(Logger::new("%a %{User-Agent}i"))
     })
     .bind(("0.0.0.0", 8081))?
     .run()

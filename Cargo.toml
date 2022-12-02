@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 actix-web = "4.2.1"
 const-decoder = "0.3.0"
+env_logger = "0.10.0"
 hex = "0.4.3"
 hex-literal = "0.3.4"
 ring-compat = "0.4.1"
