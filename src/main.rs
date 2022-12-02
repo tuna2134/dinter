@@ -11,8 +11,6 @@ use hex_literal::hex;
 use const_decoder::Decoder;
 use serde_json::json;
 
-// mod discord_types;
-
 struct AppState {
     verifykey: VerifyingKey,
 }
